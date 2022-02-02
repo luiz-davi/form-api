@@ -3,24 +3,83 @@ require "rails_helper"
 describe "Formulary RESOURCES", type: :request do
 
     describe "GET /formularies" do
-        let!(:formulary) { FactoryBot.create(:formulary, title: "CS Go") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome do time campeão do major 2021?", formulary_id: formulary.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome do melhor awper do mundo?", formulary_id: formulary.id, tipo_pergunta: "text") }
-    
-        it 'retornar todos os formulários' do
+        let!(:form) { FactoryBot.create(:formulary, title: "Space") }
+        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+
+        it 'listar todos os formulário' do
             get "/api/v1/formularies"
 
             expect(response).to have_http_status(:ok)
             expect(JSON.parse(response.body)).to eq([
                 {
-                    "id"=>formulary.id,
-                    "title"=>"CS Go",
-                    "questions"=>["qual o nome do time campeão do major 2021?", "qual o nome do melhor awper do mundo?"]
-                    
-                },
+                    "id"=>1,
+                    "title"=>"Space",
+                    "questions"=>[
+                        {
+                            "question"=>"qual o nome da nossa galaxia?", 
+                            "tipo_pergunta"=>"text"
+                        },
+                        {
+                            "question"=>"qual o nome da constelação mais próxima da nossa galaxia?",
+                            "tipo_pergunta"=>"text"
+                        }
+                    ]
+                }
             ])
         end
-    
+    end
+
+    describe "POST /formularies" do
+        it "criar um formulário" do
+            expect {
+                post "/api/v1/formularies", params: { 
+                    formulary: { title: "CS Go" },
+                    questions: [
+                        { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "text" },
+                        { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" }
+                    ]
+                }
+            }.to change { Formulary.count }.from(1).to eq(2)
+
+            expect(response).to have_http_status(:created)
+            expect( Formulary.count ).to eq(2)
+            expect( Question.count ).to eq(2)
+            expect(JSON.parse(response.body)).to eq({
+                "id" => 2,
+                "title" => "CS Go",
+                "questions" => [
+                    {
+                        "question"=>"qual o nome do time vencedor do major de 2021?", 
+                        "tipo_pergunta"=>"text"
+                    }, 
+                    {
+                        "question"=>"qual o nome do melhor awper do mundo?", 
+                        "tipo_pergunta"=>"text"
+                    }
+                ]
+            })
+        end
+
+        it 'retornar um erro de parametros faltando' do
+            post "/api/v1/formularies", params: {}
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "param is missing or the value is empty: formulary\nDid you mean?  controller\n               action"
+            })
+        end
+
+        let!(:form) { FactoryBot.create(:formulary, title: "Space") }
+
+        it 'retornar um erro de title ja existente' do
+            post "/api/v1/formularies", params: { formulary: { title: "Space" } }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Validation failed: Title has already been taken"
+            })
+        end
     end
 
 end

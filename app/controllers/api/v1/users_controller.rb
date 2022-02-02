@@ -20,7 +20,6 @@ module Api
             end
 
             def update
-                puts @user.email
                 if @user.update(user_params)
                     
                     render json: UsersRepresenter.as_json_entety(@user), status: :accepted

@@ -10,14 +10,13 @@ class FormulariesRepresenter
         end
     end
 
-    def self.as_json_entety(user)
-        user = JSON.parse(user.to_json)
+    def self.as_json_entety(formulary)
+        user = JSON.parse(formulary.to_json)
 
         {
-            id: user["id"],
-            nome: user["nome"],
-            email: user["email"],
-            cpf: user["cpf"]
+            id: formulary["id"],
+            title: formulary["title"],
+            questions: get_questions(formulary)
         }
     end
 
@@ -26,7 +25,7 @@ class FormulariesRepresenter
         def self.get_questions(formulary)
             questions = []
             formulary.questions.each do |question|
-                questions << question.nome
+                questions << { question: question.nome, tipo_pergunta: question.tipo_pergunta}
             end
 
             questions
