@@ -1,6 +1,7 @@
 module Api
     module V1
         class FormulariesController < ApplicationController
+            before_action :set_formulary, only: [:update, :destroy]
 
             rescue_from ActionController::ParameterMissing, with: :parameter_missing
             rescue_from ActiveRecord::RecordInvalid, with: :parameter_already_exists
@@ -21,6 +22,20 @@ module Api
                 end
             end
 
+            def update
+                if @formulary.update(formulary_params)
+                    render json: FormulariesRepresenter.as_json_entety(@formulary), status: :accepted
+                else
+                    render json: @formulary.erros, status: :unprocessable_entity
+                end
+            end
+
+            def destroy
+                @formulary.destroy
+
+                head :no_content
+            end
+
             private
                 # formularies
                 def formulary_params
@@ -29,6 +44,10 @@ module Api
 
                 def questions_params
                     params.require(:questions)
+                end
+
+                def set_formulary
+                    @formulary = Formulary.find(params[:id])
                 end
 
                 # questions

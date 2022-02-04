@@ -81,5 +81,61 @@ describe "Formulary RESOURCES", type: :request do
             })
         end
     end
+    
+    describe "PUT /formularies" do
+        let!(:form) { FactoryBot.create(:formulary, title: "Space") }
+        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+
+        it "editar as informações de um formulário" do
+            put "/api/v1/formularies/#{form.id}", params: { 
+                formulary: { title: "Outer Space" },
+                questions: [
+                    { nome: "qual o nome da nossa galaxia?", tipo_pergunta: "text" },
+                    { nome: "qual o nome da constelação mais próxima da nossa galaxia?", tipo_pergunta: "text" }
+                ]
+            }
+
+            expect(response).to  have_http_status(:accepted)
+            expect(JSON.parse(response.body)).to eq({
+                "id"=>1,
+                "title"=>"Outer Space",
+                "questions"=>[
+                    {
+                        "question"=>"qual o nome da nossa galaxia?", 
+                        "tipo_pergunta"=>"text"
+                    },
+                    {
+                        "question"=>"qual o nome da constelação mais próxima da nossa galaxia?",
+                        "tipo_pergunta"=>"text"
+                    }
+                ]
+            })
+        end
+
+        it "retornar erro de parametros faltando" do
+            put "/api/v1/formularies/#{form.id}", params: {}
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error"=>"param is missing or the value is empty: formulary\nDid you mean?  controller\n               action\n               id"
+            })
+        end
+    end
+
+    describe "DELETE /forlumaries" do
+        let!(:form) { FactoryBot.create(:formulary, title: "Space") }
+        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+
+        it "remover um resgistro de um formulário do banco" do
+            expect{
+                delete "/api/v1/formularies/#{form.id}"
+            }.to change { Formulary.count }.from(1).to eq(0)
+            
+            expect( Question.count ).to eq(0)
+            expect(response).to have_http_status(:no_content)
+        end
+    end
 
 end

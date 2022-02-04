@@ -21,10 +21,8 @@ module Api
 
             def update
                 if @user.update(user_params)
-                    
                     render json: UsersRepresenter.as_json_entety(@user), status: :accepted
                 else
-                    puts @user.email
                     render json: @user.errors, status: :unprocessable_entity
                 end
             end
