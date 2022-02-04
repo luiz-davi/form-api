@@ -37,7 +37,7 @@ describe "Formulary RESOURCES", type: :request do
                     formulary: { title: "CS Go" },
                     questions: [
                         { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "text" },
-                        { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" }
+                        { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" },
                     ]
                 }
             }.to change { Formulary.count }.from(1).to eq(2)

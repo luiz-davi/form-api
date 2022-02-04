@@ -53,7 +53,10 @@ module Api
                 # questions
                 def save_questions(formulary)
                     questions_params.each do |questions|
-                        Question.create(nome: questions[:nome], formulary_id: formulary.id, tipo_pergunta: questions[:tipo_pergunta])
+                        # garantindo que não haja duas perguntas com a mesma descrição dentro de um mesmo formulário
+                        unless formulary.questions.find_by(nome: questions[:nome])
+                            Question.create(nome: questions[:nome], formulary_id: formulary.id, tipo_pergunta: questions[:tipo_pergunta])
+                        end
                     end
                 end
 

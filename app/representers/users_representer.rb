@@ -21,9 +21,4 @@ class UsersRepresenter
             cpf: user["cpf"]
         }
     end
-
-    private
-    
-        attr_reader :users
-
 end

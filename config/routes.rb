@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :users, only: [:index, :create, :update, :destroy]
-      post 'authenticate', to: "authentication#create"
       resources :formularies, only: [:index, :create, :update, :destroy]
+      resources :questions, only: [:index, :create, :update, :destroy]
+      post 'authenticate', to: "authentication#create"
     end
   end
 
