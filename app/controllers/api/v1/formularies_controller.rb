@@ -1,8 +1,11 @@
 module Api
     module V1
         class FormulariesController < ApplicationController
+            include ActionController::HttpAuthentication::Token
+            
+            before_action :authenticate_user, only: [:create, :destroy, :update]
             before_action :set_formulary, only: [:update, :destroy]
-
+            
             rescue_from ActionController::ParameterMissing, with: :parameter_missing
             rescue_from ActiveRecord::RecordInvalid, with: :parameter_already_exists
 
@@ -37,6 +40,17 @@ module Api
             end
 
             private
+                def authenticate_user
+                    # Authorization: Bearer <token>
+                    token, _options = token_and_options(request)
+                    user_id = AuthenticationTokenService.decode(token)
+
+                    User.find(user_id)
+                    
+                rescue ActiveRecord::RecordNotFound,JWT::DecodeError
+                    render status: :unauthorized
+                end
+                
                 # formularies
                 def formulary_params
                     params.require(:formulary).permit(:title)
@@ -68,7 +82,6 @@ module Api
                 def parameter_already_exists(e)
                     render json: { error: e.message }, status: :unprocessable_entity
                 end
-
         end
     end
 end

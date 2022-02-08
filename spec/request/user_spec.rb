@@ -44,7 +44,16 @@ describe 'User RESOURCES', type: :request do
         let!(:user) { FactoryBot.create(:user, nome: "user", password: "123" , email: 'user@gmail', cpf: '12345678972') }
         
         it 'editar as informações de um usuário' do
-            put "/api/v1/users/#{user.id}", params: { user: { nome: "user", password: "123" , email: 'davi@gmail', cpf: '12345678972' } }
+            put "/api/v1/users/#{user.id}", params: { 
+                
+                user: { 
+                    nome: "user", 
+                    password: "123" , 
+                    email: 'davi@gmail', 
+                    cpf: '12345678972' 
+                } 
+                
+            }
 
             expect(response).to  have_http_status(:accepted)
             expect(JSON.parse(response.body)).to eq({ 

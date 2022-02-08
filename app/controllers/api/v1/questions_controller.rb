@@ -1,6 +1,9 @@
 module Api
     module V1
         class QuestionsController < ApplicationController
+            include ActionController::HttpAuthentication::Token
+            
+            before_action :authenticate_user, only: [:create, :destroy, :update]
             before_action :set_form, only: [:create]
             before_action :set_question, only: [:update, :destroy]
 
@@ -43,6 +46,19 @@ module Api
             end
 
             private
+
+                # autenticação
+                def authenticate_user
+                    # Authorization: Bearer <token>
+                    token, _options = token_and_options(request)
+                    user_id = AuthenticationTokenService.decode(token)
+
+                    User.find(user_id)
+                    
+                rescue ActiveRecord::RecordNotFound,JWT::DecodeError
+                    render status: :unauthorized
+                end
+
                 # questions
                 def questions_params
                     params.require(:question).permit(:nome, :tipo_pergunta)

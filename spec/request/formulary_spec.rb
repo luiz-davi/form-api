@@ -31,16 +31,16 @@ describe "Formulary RESOURCES", type: :request do
     end
 
     describe "POST /formularies" do
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+
         it "criar um formulário" do
-            expect {
-                post "/api/v1/formularies", params: { 
-                    formulary: { title: "CS Go" },
-                    questions: [
-                        { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "text" },
-                        { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" },
-                    ]
-                }
-            }.to change { Formulary.count }.from(1).to eq(2)
+            post "/api/v1/formularies", params: { 
+                formulary: { title: "CS Go" },
+                questions: [
+                    { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "text" },
+                    { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" },
+                ]
+            }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to have_http_status(:created)
             expect( Formulary.count ).to eq(2)
@@ -62,7 +62,7 @@ describe "Formulary RESOURCES", type: :request do
         end
 
         it 'retornar um erro de parametros faltando' do
-            post "/api/v1/formularies", params: {}
+            post "/api/v1/formularies", params: {},  headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
@@ -73,7 +73,7 @@ describe "Formulary RESOURCES", type: :request do
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
 
         it 'retornar um erro de title ja existente' do
-            post "/api/v1/formularies", params: { formulary: { title: "Space" } }
+            post "/api/v1/formularies", params: { formulary: { title: "Space" } }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
@@ -83,6 +83,8 @@ describe "Formulary RESOURCES", type: :request do
     end
     
     describe "PUT /formularies" do
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
         let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
@@ -94,7 +96,7 @@ describe "Formulary RESOURCES", type: :request do
                     { nome: "qual o nome da nossa galaxia?", tipo_pergunta: "text" },
                     { nome: "qual o nome da constelação mais próxima da nossa galaxia?", tipo_pergunta: "text" }
                 ]
-            }
+            }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to  have_http_status(:accepted)
             expect(JSON.parse(response.body)).to eq({
@@ -114,7 +116,8 @@ describe "Formulary RESOURCES", type: :request do
         end
 
         it "retornar erro de parametros faltando" do
-            put "/api/v1/formularies/#{form.id}", params: {}
+            put "/api/v1/formularies/#{form.id}", params: {}, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
+
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
@@ -124,13 +127,15 @@ describe "Formulary RESOURCES", type: :request do
     end
 
     describe "DELETE /forlumaries" do
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
         let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
 
         it "remover um resgistro de um formulário do banco" do
             expect{
-                delete "/api/v1/formularies/#{form.id}"
+                delete "/api/v1/formularies/#{form.id}", headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
             }.to change { Formulary.count }.from(1).to eq(0)
             
             expect( Question.count ).to eq(0)
