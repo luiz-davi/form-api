@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_01_223920) do
+ActiveRecord::Schema.define(version: 2022_02_08_141104) do
 
   create_table "answers", force: :cascade do |t|
     t.string "content"
@@ -47,7 +47,19 @@ ActiveRecord::Schema.define(version: 2022_02_01_223920) do
     t.string "password_digest"
   end
 
+  create_table "visits", force: :cascade do |t|
+    t.date "data"
+    t.string "status"
+    t.integer "user_id", null: false
+    t.datetime "checkin_at"
+    t.datetime "checkout_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_visits_on_user_id"
+  end
+
   add_foreign_key "answers", "formularies"
   add_foreign_key "answers", "questions"
   add_foreign_key "questions", "formularies"
+  add_foreign_key "visits", "users"
 end

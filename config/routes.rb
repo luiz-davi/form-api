@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :create, :update, :destroy]
       resources :formularies, only: [:index, :create, :update, :destroy]
       resources :questions, only: [:index, :create, :update, :destroy]
+      resources :visits, only: [:create, :update, :index, :destroy]
       post 'authenticate', to: "authentication#create"
     end
   end
