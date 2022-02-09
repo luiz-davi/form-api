@@ -26,7 +26,7 @@ module Api
             end
 
             def update
-                if @visit.update(visit_params)
+                if @visit.update(visits_params)
                    render json: VisitsRepresenter.as_json_entety(@visit), status: :accepted 
                 else
                     render json: @visit.erros, status: :unprocessable_entity

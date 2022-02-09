@@ -13,16 +13,16 @@ RSpec.describe "Visits RESOURCES", type: :request do
             expect(response).to have_http_status(:ok)
             expect(JSON.parse(response.body)).to eq([
                 {
-                    "chekin_at"=>nil,
-                    "chekout_at"=>nil,
-                    "data"=>"2022-02-15T10:00:00.000Z",
+                    "checkin_at"=>nil,
+                    "checkout_at"=>nil,
+                    "data"=>"2022-02-15",
                     "id"=>1,
                     "status"=>"pendente"
                 },
                 {
-                    "chekin_at"=>nil,
-                    "chekout_at"=>nil,
-                    "data"=>"2022-03-10T09:00:00.000Z",
+                    "checkin_at"=>nil,
+                    "checkout_at"=>nil,
+                    "data"=>"2022-03-10",
                     "id"=>2,
                     "status"=>"pendente"
                 }
@@ -125,8 +125,8 @@ RSpec.describe "Visits RESOURCES", type: :request do
                 visit: {
                     data: Date.today,
                     status: "pendente",
-                    checkin_at: "2022-02-10 11:30",
-                    checkout_at: DateTime.now
+                    checkin_at: "2022-02-09 11:30",
+                    checkout_at: "2022-02-08 11:30"
                 }
             }, headers: { 
                 "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w"
@@ -134,7 +134,7 @@ RSpec.describe "Visits RESOURCES", type: :request do
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
-                "error"=> "Validation failed: Checkin at inválido. Maior ou igual a data atual, Checkin at inválido. Data posterior ao checkout_at"
+                "error"=> "Validation failed: Checkin at inválido. Data posterior ao checkout_at, Checkout at inválido. Data anterior ao checkin_at"
             })
         end
 
@@ -158,17 +158,39 @@ RSpec.describe "Visits RESOURCES", type: :request do
 
     describe "PUT /visits" do
         let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
-        let!(:visit) { FactoryBot.create(:visit, data: "2021-07-15", status: "realizando", checkin_at: "2021-07-15 10:00", checkout_at: nil, user_id: user.id) }
+        let!(:visit) { FactoryBot.create(:visit, data: "2022-05-15", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
 
         it "atualizar as informações de uma visita" do
+            put "/api/v1/visits/#{visit.id}", params: {
+                visit: {
+                    status: "realizado",
+                    checkout_at: "2022-02-08 12:00"
+                }
+            }, headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w"
+            }
+
+            expect(response).to have_http_status(:accepted)
+            expect(JSON.parse(response.body)).to eq({
+                "id" => 1,
+                "data" => "2022-05-15",
+                "checkin_at" => "2022-02-08T10:00:00.000-03:00",
+                "checkout_at" => "2022-02-08T12:00:00.000-03:00",
+                "status" => "realizado"
+            })
+
+        end
+
+        it "retornar erro de parâmetros faltando" do
             put "/api/v1/visits/#{visit.id}", params: {}, headers: { 
                 "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w"
             }
 
-            # expect(response).to have_http_status(:cre)
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "param is missing or the value is empty: visit\nDid you mean?  id\n               controller\n               action"
+            })
         end
     end
 
-    describe "DELETE /visits" do
-    end
 end
