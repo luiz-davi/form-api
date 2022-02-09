@@ -4,7 +4,7 @@ module Api
             include ActionController::HttpAuthentication::Token
             
             before_action :authenticate_user, only: [:create, :destroy, :update]
-            before_action :set_visit, only: [:update]
+            before_action :set_visit, only: [:update, :destroy]
 
             rescue_from ActionController::ParameterMissing, with: :parameter_missing 
             rescue_from ActiveRecord::RecordInvalid, with: :validates_errors
@@ -34,6 +34,9 @@ module Api
             end
 
             def destroy
+                @visit.destroy
+
+                head :no_content
             end
 
             private

@@ -193,4 +193,18 @@ RSpec.describe "Visits RESOURCES", type: :request do
         end
     end
 
+    describe "DELETE /visits" do
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:visit) { FactoryBot.create(:visit, data: "2022-05-15", status: "realizada", checkin_at: "2022-02-08 10:00", checkout_at: "2022-02-08 12:00", user_id: user.id) }
+
+        it "removendo um registro de visita do banco" do
+            expect {
+                delete "/api/v1/visits/#{visit.id}", headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
+            }.to change { Visit.count }.from(1).to eq(0)
+
+            expect(response).to have_http_status(:no_content)
+            expect( Visit.count ).to eq(0)
+        end
+    end
+
 end
