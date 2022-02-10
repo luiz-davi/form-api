@@ -41,8 +41,6 @@ RSpec.describe "Visits RESOURCES", type: :request do
                     visit: {
                         data: Date.today,
                         status: "pendente",
-                        checkin_at: "nil",
-                        checkout_at: "nil"
                     }
                 }, headers: { 
                     "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w"
@@ -52,7 +50,7 @@ RSpec.describe "Visits RESOURCES", type: :request do
             expect(response).to have_http_status(:created)
             expect(JSON.parse(response.body)).to eq({
                 "id" => 1,
-                "data" => "2022-02-09",
+                "data" => Date.today.strftime("%Y-%m-%d"),
                 "checkin_at" => nil,
                 "checkout_at" => nil,
                 "status" => "pendente"
@@ -102,12 +100,12 @@ RSpec.describe "Visits RESOURCES", type: :request do
             })
         end
 
-        it 'retornar erro quando a data de checkin_at for inválida' do
+        it 'retornar erro quando a data de checkinx_at for inválida' do
             post "/api/v1/visits", params: {
                 visit: {
                     data: Date.today,
                     status: "pendente",
-                    checkin_at: "2022-02-10 11:30",
+                    checkin_at: "2050-02-10 11:30",
                     checkout_at: "nil"
                 }
             }, headers: { 
