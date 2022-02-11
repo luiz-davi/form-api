@@ -1,7 +1,13 @@
 module Api
     module V1
         class UsersController < ApplicationController
-            before_action :set_user, only: [:update, :destroy]      
+            include ActionController::HttpAuthentication::Token
+            
+            before_action :authenticate_user, only: [:destroy, :update]
+            before_action :check_user, only: [:destroy, :update]
+            before_action :set_user, only: [:update, :destroy]
+
+            rescue_from ActiveRecord::RecordInvalid, with: :validates
             
             def index
                 users = User.all
@@ -23,7 +29,7 @@ module Api
                 if @user.update(user_params)
                     render json: UsersRepresenter.as_json_entety(@user), status: :accepted
                 else
-                    render json: @user.errors, status: :unprocessable_entity
+                    render json: @user.erros, status: :unprocessable_entity
                 end
             end
 
@@ -41,6 +47,28 @@ module Api
 
             def set_user
                 @user = User.find(params[:id])
+            end
+
+            def authenticate_user
+                # Authorization: Bearer <token>
+                token, _options = token_and_options(request)
+                user_id = AuthenticationTokenService.decode(token)
+                
+            rescue ActiveRecord::RecordNotFound,JWT::DecodeError
+                render status: :unauthorized
+            end
+
+            def check_user
+                token, _options = token_and_options(request)
+                user_id = AuthenticationTokenService.decode(token)
+
+                unless user_id == params[:id].to_i
+                    render json: {error: "token inválido para esse usuário"}, status: :unauthorized
+                end
+            end
+            
+            def validates(e)
+                render json: { error: e.message }, status: :unprocessable_entity
             end
         end
     end

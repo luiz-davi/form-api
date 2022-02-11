@@ -29,7 +29,7 @@ RSpec.describe "Questions RESOURCES", type: :request do
     end
 
     describe "POST /questions" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
         let!(:form) { FactoryBot.create(:formulary, title: "Game Of Thrones") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da familia dos dragões?", formulary_id: form.id, tipo_pergunta: "text") }
 
@@ -99,7 +99,7 @@ RSpec.describe "Questions RESOURCES", type: :request do
     end
 
     describe "PUT /questions" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
@@ -128,7 +128,7 @@ RSpec.describe "Questions RESOURCES", type: :request do
     end
 
     describe "DELETE /questions" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }

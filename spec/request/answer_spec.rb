@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Answers RESOURCES", type: :request do
 
     describe "GET /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
@@ -20,7 +20,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
             expect(response).to have_http_status(:ok)     
             expect(JSON.parse(response.body)).to eq([
                 {
-                    "answered_at"=>"2022-02-10",
+                    "answered_at"=> Date.today.strftime("%Y-%m-%d"),
                     "content"=>"via lactea",
                     "formulary"=>1,
                     "id"=>1,
@@ -28,7 +28,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
                     "visit"=>1
                 },
                 {
-                    "answered_at"=>"2022-02-10",
+                    "answered_at"=> Date.today.strftime("%Y-%m-%d"),
                     "content"=>"andromeda",
                     "formulary"=>1,
                     "id"=>2,
@@ -40,7 +40,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "POST /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
@@ -109,7 +109,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "PUT /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da galaxya que tem o nome de um animal no meio?", formulary_id: form.id, tipo_pergunta: "text") }
@@ -134,7 +134,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
                 "question" => "qual o nome da galaxya que tem o nome de um animal no meio?",
                 "formulary" => "Space",
                 "visit" => "2022-02-27",
-                "answered_at" => "2022-02-10",
+                "answered_at" => Date.today.strftime("%Y-%m-%d"),
             })
         end
 
@@ -152,7 +152,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "DELETE /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123", cpf: "12345678978")}
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
         let!(:question) { FactoryBot.create(:question, nome: "qual o nome da galaxya que tem o nome de um animal no meio?", formulary_id: form.id, tipo_pergunta: "text") }

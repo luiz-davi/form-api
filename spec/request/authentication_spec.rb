@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Authentication", type: :request do
-    let!(:user) { FactoryBot.create(:user, nome: "luiz davi", password: "123" , email: 'luiz@gmail', cpf: '12345678978') }
+    let!(:user) { FactoryBot.create(:user, nome: "luiz davi", password: "123456" , email: 'luiz@gmail', cpf: '85213043070') }
 
     describe "POST /authenticate" do
         it "autenticando o cliente" do
-            post "/api/v1/authenticate", params: { email: user.email, password: "123" }
+            post "/api/v1/authenticate", params: { email: user.email, password: "123456" }
 
             expect(response).to have_http_status(:created)
             expect(JSON.parse(response.body)).to eq({
@@ -14,7 +14,7 @@ RSpec.describe "Authentication", type: :request do
         end
 
         it 'retorna um erro quando o nome estiver faltando' do
-            post '/api/v1/authenticate', params: { password: "123" }
+            post '/api/v1/authenticate', params: { password: "123456" }
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
