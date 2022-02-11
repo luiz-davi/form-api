@@ -80,6 +80,18 @@ describe "Formulary RESOURCES", type: :request do
                 "error" => "Validation failed: Title has already been taken"
             })
         end
+
+        it 'retornar erro quando não houver questões' do
+            post "/api/v1/formularies", params: { 
+                formulary: { title: "CS Go" },
+                questions: []
+            }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
+            
+            expect(response).to have_http_status(:bad_request)
+            expect(JSON.parse(response.body)).to eq({
+                "error"=> "deve haver pelo menos uma pergunta"
+            })
+        end
     end
     
     describe "PUT /formularies" do

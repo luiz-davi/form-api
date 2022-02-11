@@ -4,8 +4,9 @@ module Api
             include ActionController::HttpAuthentication::Token
             
             before_action :authenticate_user, only: [:create, :destroy, :update]
+            before_action :check_questions, only: [:create]
             before_action :set_formulary, only: [:update, :destroy]
-            
+         
             rescue_from ActionController::ParameterMissing, with: :parameter_missing
             rescue_from ActiveRecord::RecordInvalid, with: :parameter_already_exists
 
@@ -50,14 +51,16 @@ module Api
                 rescue ActiveRecord::RecordNotFound,JWT::DecodeError
                     render status: :unauthorized
                 end
+
+                def check_questions
+                    if params.require(:questions)[0] == ""
+                        render json: { error: "deve haver pelo menos uma pergunta" }, status: :bad_request
+                    end
+                end
                 
                 # formularies
                 def formulary_params
                     params.require(:formulary).permit(:title)
-                end
-
-                def questions_params
-                    params.require(:questions)
                 end
 
                 def set_formulary
@@ -66,10 +69,12 @@ module Api
 
                 # questions
                 def save_questions(formulary)
-                    questions_params.each do |questions|
+                    questions = params[:questions]
+                    
+                    questions.each do |quest|
                         # garantindo que não haja duas perguntas com a mesma descrição dentro de um mesmo formulário
-                        unless formulary.questions.find_by(nome: questions[:nome])
-                            Question.create(nome: questions[:nome], formulary_id: formulary.id, tipo_pergunta: questions[:tipo_pergunta])
+                        unless formulary.questions.find_by(nome: quest[:nome])
+                            Question.create(nome: quest[:nome], formulary_id: formulary.id, tipo_pergunta: quest[:tipo_pergunta])
                         end
                     end
                 end
