@@ -44,7 +44,7 @@ describe "Formulary RESOURCES", type: :request do
 
             expect(response).to have_http_status(:created)
             expect( Formulary.count ).to eq(2)
-            expect( Question.count ).to eq(2)
+            expect( Question.count ).to eq(4)
             expect(JSON.parse(response.body)).to eq({
                 "id" => 2,
                 "title" => "CS Go",
@@ -66,14 +66,23 @@ describe "Formulary RESOURCES", type: :request do
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
-                "error" => "param is missing or the value is empty: formulary\nDid you mean?  controller\n               action"
+                "error" => "param is missing or the value is empty: questions\nDid you mean?  action\n               controller"
             })
         end
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
+        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+
 
         it 'retornar um erro de title ja existente' do
-            post "/api/v1/formularies", params: { formulary: { title: "Space" } }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
+            post "/api/v1/formularies", params: { 
+                formulary: { title: "Space" },
+                questions: [
+                    { nome: "qual o nome da nossa galaxia?", tipo_pergunta: "text" },
+                    { nome: "qual o nome da constelação mais próxima da nossa galaxia?", tipo_pergunta: "text" },
+                ]
+            }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({

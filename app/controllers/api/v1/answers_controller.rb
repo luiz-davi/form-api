@@ -16,12 +16,25 @@ module Api
             end
 
             def create
-                answer = Answer.new(answers_params.merge(answered_at: Date.today))
+                
 
-                if answer.save!
-                    render json: AnswersRepresenter.as_json_entety(answer), status: :created
-                else
-                    render json: answer.errors, status: :unprocessable_entity
+                if visit.status == "pendente"
+
+                    render json: {error: "visita ainda não efetuada"}, status: :not_acceptable
+
+                elsif visit.status == "realizando"
+                    answer = Answer.new(answers_params.merge(answered_at: Date.today))
+
+                    if answer.save!
+                        render json: AnswersRepresenter.as_json_entety(answer), status: :created
+                    else
+                        render json: answer.errors, status: :unprocessable_entity
+                    end
+
+                elsif visit.status == "realizada"
+
+                    render json: {error: "visita já realizada, não é mais possível atribuir respostas a ela"}, status: :not_acceptable
+                    
                 end
             end
 
@@ -47,6 +60,10 @@ module Api
 
                 def set_answer
                     @answer = Answer.find(params[:id])
+                end
+
+                def visit
+                    Visit.find(params.require(:answer)[:visit_id])
                 end
 
                 # before_actions

@@ -47,6 +47,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
         let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
 
         let!(:visit) { FactoryBot.create(:visit, data: "2022-02-27", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
+        let!(:visit2) { FactoryBot.create(:visit, data: "2050-10-19", status: "realizada", checkin_at: "2022-01-08 10:00", checkout_at: "2022-01-08 10:00", user_id: user.id) }
 
         it "respondendo uma pergunta de um formulário" do
             expect {
@@ -78,7 +79,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
         end
 
         it "retornar erros de parâmetros faltando" do
-            post "/api/v1/answers", headers: { 
+            post "/api/v1/answers", params: {}, headers: { 
                 "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
             }
 
@@ -105,6 +106,26 @@ RSpec.describe "Answers RESOURCES", type: :request do
             expect(JSON.parse(response.body)).to eq({
                 "error"=> "Validation failed: Formulary must exist, Question must exist"
             })
+        end
+
+        it "retornar erro quando a visita já tiver sido realizada" do
+            post "/api/v1/answers", params: {
+                answer: { 
+                    content: "via lactea",
+                    question_id: question.id,
+                    formulary_id: form.id,
+                    visit_id: visit2.id,
+                },
+                
+            }, headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+            }
+
+            expect(response).to have_http_status(:not_acceptable)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "visita já realizada, não é mais possível atribuir respostas a ela"
+            })  
+
         end
     end
 
