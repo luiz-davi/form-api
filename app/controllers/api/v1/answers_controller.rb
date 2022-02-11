@@ -3,7 +3,7 @@ module Api
         class AnswersController < ApplicationController
             include ActionController::HttpAuthentication::Token
             
-            before_action :authenticate_user, only: [:create, :update]
+            before_action :authenticate_user, only: [:create, :update, :responder_formulario]
             before_action :set_answer, only: [:update, :destroy]
 
             rescue_from ActionController::ParameterMissing, with: :parameter_missing
@@ -38,6 +38,12 @@ module Api
                 end
             end
 
+            def responder_formulario
+                answers = save_answers
+
+                render json: AnswersRepresenter.as_json(answers), status: :created
+            end
+
             def update
                 if @answer.update(answers_params.merge(answered_at: Date.today))
                     render json: AnswersRepresenter.as_json_entety(@answer), status: :accepted 
@@ -60,6 +66,31 @@ module Api
 
                 def set_answer
                     @answer = Answer.find(params[:id])
+                end
+
+                def save_answers
+                    result = []
+
+                    form = Formulary.find_by(title: params[:formulary])
+                    visit = Visit.find(params[:visit])
+                    answers = params[:answers]
+                    
+                    count = 0
+
+                    answers.each do |answer|
+                        result << Answer.create(
+                            content: answer[:content],
+                            question_id: form.questions[count].id,
+                            formulary_id: form.id,
+                            visit_id: visit.id,
+                            answered_at: Date.today
+                        )
+
+                        count +=1
+                    end
+
+                    result
+
                 end
 
                 def visit

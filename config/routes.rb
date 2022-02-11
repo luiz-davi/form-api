@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       resources :formularies, only: [:index, :create, :update, :destroy]
       resources :questions, only: [:index, :create, :update, :destroy]
       resources :visits, only: [:create, :update, :index, :destroy]
+
       resources :answers, only: [:create, :index, :update, :destroy]
+      post "responder_formulario" => "answers#responder_formulario"
 
       post 'authenticate', to: "authentication#create"
     end

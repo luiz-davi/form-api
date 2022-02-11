@@ -129,6 +129,54 @@ RSpec.describe "Answers RESOURCES", type: :request do
         end
     end
 
+    describe "POST /responder_formulario" do
+        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+
+        let!(:form) { FactoryBot.create(:formulary, title: "Space") }
+        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+
+        let!(:visit) { FactoryBot.create(:visit, data: "2022-05-30", status: "realizando", checkin_at: "2022-02-04 10:00", checkout_at: nil, user_id: user.id) }
+        
+        it "respondendo formulário" do
+            expect {
+                post "/api/v1/responder_formulario", params: {
+                    formulary: form.title,
+                    visit: visit.id,
+                    answers: [
+                        {content: "via lactea"},
+                        {content: "andromeda"}
+                    ]
+                },  headers: { 
+                    "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+                }
+            }.to change { Answer.count }.from(0).to eq(2)
+            
+            expect(response).to have_http_status(:created)
+            expect( question.answers[0].content ).to eq("via lactea")
+            expect( question2.answers[0].content ).to eq("andromeda")
+            expect(JSON.parse(response.body)).to eq([
+                {
+                    "answered_at"=>"2022-02-11",
+                    "content"=>"via lactea",
+                    "formulary"=>1,
+                    "id"=>1,
+                    "question"=>1,
+                    "visit"=>1
+                },
+                {
+                    "answered_at"=>"2022-02-11",
+                    "content"=>"andromeda",
+                    "formulary"=>1,
+                    "id"=>2,
+                    "question"=>2,
+                    "visit"=>1
+                }
+            ])
+        end
+
+    end
+
     describe "PUT /answers" do
         let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
