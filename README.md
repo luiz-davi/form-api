@@ -55,13 +55,13 @@ A aplicação tem por finalidade simular uma pesquisa de campo. Formulários sã
 ### Visits
 
 + Criação
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{"visit": { "data": data_visita, "status": visit_status } }' http://localhost:3000/api/v1/visits -v
 + Listagem
->
+> curl -X GET http://localhost:3000/api/v1/visits -v
 + Edição
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request PUT --data '{"visit": { "status": novo_status, "checkin_at": novo_checkin, "checkout_at": novo_checkout } }' http://localhost:3000/api/v1/visits/ **visit_id** -v
 + Remoção
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request DELETE http://localhost:3000/api/v1/visits/ **visit_id** -v
 
 ### Answers
 
