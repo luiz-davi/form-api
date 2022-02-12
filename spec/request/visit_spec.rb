@@ -201,7 +201,8 @@ RSpec.describe "Visits RESOURCES", type: :request do
             }.to change { Visit.count }.from(1).to eq(0)
 
             expect(response).to have_http_status(:no_content)
-            expect( Visit.count ).to eq(0)
+            expect( Visit.only_deleted.count ).to eq(1)
+            expect( Visit.only_deleted[0].id ).to eq(1)
         end
     end
 

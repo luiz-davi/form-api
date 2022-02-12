@@ -237,7 +237,10 @@ RSpec.describe "Answers RESOURCES", type: :request do
             }.to change { Answer.count }.from(1).to eq(0)
 
             expect(response).to have_http_status(:no_content)
-            
+            expect( Answer.only_deleted.count ).to eq(1)
+            expect( Answer.only_deleted[0].id ).to eq(1)
+            expect( Answer.only_deleted[0].content ).to eq("via lactea")
+             
         end
     end
 

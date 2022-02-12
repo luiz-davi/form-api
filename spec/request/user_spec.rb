@@ -128,6 +128,9 @@ describe 'User RESOURCES', type: :request do
             }.to change { User.count }.from(1).to(0)
 
             expect(response).to have_http_status(:no_content)
+            expect( User.only_deleted.count ).to eq(1)
+            expect( User.only_deleted[0].cpf ).to eq("85213043070")
+            expect( User.only_deleted[0].email ).to eq("luiz@gmail")
         end
 
         it "retornar erro quando o token não for do usuário especificado" do

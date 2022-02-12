@@ -161,6 +161,9 @@ describe "Formulary RESOURCES", type: :request do
             
             expect( Question.count ).to eq(0)
             expect(response).to have_http_status(:no_content)
+            expect( Formulary.only_deleted.count ).to eq(1)
+            expect( Formulary.only_deleted[0].id ).to eq(1)
+            expect( Formulary.only_deleted[0].title ).to eq("Space")
         end
     end
 

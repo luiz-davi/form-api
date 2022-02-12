@@ -139,6 +139,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
             }.to change { Question.count }.from(1).to eq(0)
 
             expect(response).to have_http_status(:no_content)
+            expect( Question.only_deleted.count ).to eq(1)
+            expect( Question.only_deleted[0].nome ).to eq("qual o nome da nossa galaxia?")
         end
     
     end
