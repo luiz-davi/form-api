@@ -32,6 +32,7 @@ group :development, :test do
   gem "rspec-rails"
   gem 'jwt'
   gem 'factory_bot_rails'
+  gem 'paranoia', '~> 2.5', '>= 2.5.2' 
 end
 
 group :development do

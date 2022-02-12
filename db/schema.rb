@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_09_181427) do
+ActiveRecord::Schema.define(version: 2022_02_12_175943) do
 
   create_table "answers", force: :cascade do |t|
     t.string "content"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 2022_02_09_181427) do
     t.date "answered_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_answers_on_deleted_at"
     t.index ["formulary_id"], name: "index_answers_on_formulary_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["visit_id"], name: "index_answers_on_visit_id"
@@ -29,6 +31,8 @@ ActiveRecord::Schema.define(version: 2022_02_09_181427) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_formularies_on_deleted_at"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -37,6 +41,8 @@ ActiveRecord::Schema.define(version: 2022_02_09_181427) do
     t.string "tipo_pergunta"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_questions_on_deleted_at"
     t.index ["formulary_id"], name: "index_questions_on_formulary_id"
   end
 
@@ -47,6 +53,8 @@ ActiveRecord::Schema.define(version: 2022_02_09_181427) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "password_digest"
+    t.datetime "deleted_at"
+    t.index "\"delted_at\"", name: "index_users_on_delted_at"
   end
 
   create_table "visits", force: :cascade do |t|
@@ -57,6 +65,8 @@ ActiveRecord::Schema.define(version: 2022_02_09_181427) do
     t.datetime "checkout_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_visits_on_deleted_at"
     t.index ["user_id"], name: "index_visits_on_user_id"
   end
 

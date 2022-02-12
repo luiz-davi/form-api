@@ -157,7 +157,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
             expect( question2.answers[0].content ).to eq("andromeda")
             expect(JSON.parse(response.body)).to eq([
                 {
-                    "answered_at"=>"2022-02-11",
+                    "answered_at"=>Date.today.strftime("%Y-%m-%d"),
                     "content"=>"via lactea",
                     "formulary"=>1,
                     "id"=>1,
@@ -165,7 +165,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
                     "visit"=>1
                 },
                 {
-                    "answered_at"=>"2022-02-11",
+                    "answered_at"=>Date.today.strftime("%Y-%m-%d"),
                     "content"=>"andromeda",
                     "formulary"=>1,
                     "id"=>2,
