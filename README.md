@@ -82,7 +82,7 @@ Só é necessário colocar a imagem se realmente houver uma. Lembrando que tamb�
 + Responder Formulario
 > Nesse ENPOINT, é necessário que o usuário saiba exatamente quantas questões o formulário tem, e quais são elas, para poder criar todas as respostas de uma vez, e que deem match com as questões corretas. <br><br>
 curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{ "formulary": **formulary_title**, "visit": **visit_d**, "answers": [ { "content": **primeira_resposta** }, { "content": **segunda_resposta** } ] }'  http://localhost:3000/api/v1/responder_formulario -v <br><br>
-Essa chama é um exemplo de uma resposta de um formulário que tem duas perguntas, mas pode haver mais, tudo depende do formulário.
+Essa chama é um exemplo de uma resposta para um formulário que tem duas perguntas, mas pode haver mais, tudo depende do formulário.
 
 ## Explicação dos teste
 
