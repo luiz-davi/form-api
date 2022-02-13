@@ -9,6 +9,7 @@ module Api
          
             rescue_from ActionController::ParameterMissing, with: :parameter_missing
             rescue_from ActiveRecord::RecordInvalid, with: :parameter_already_exists
+            rescue_from ActiveRecord::RecordNotFound, with: :entety_not_found
 
             def index
                 formularies = Formulary.all
@@ -23,7 +24,10 @@ module Api
                     save_questions(formulary)
 
                     render json: FormulariesRepresenter.as_json_entety(formulary), status: :created
+                else
+                    render json: @formulary.erros, status: :unprocessable_entity
                 end
+
             end
 
             def update
@@ -85,6 +89,10 @@ module Api
                 end
 
                 def parameter_already_exists(e)
+                    render json: { error: e.message }, status: :unprocessable_entity
+                end
+
+                def entety_not_found(e)
                     render json: { error: e.message }, status: :unprocessable_entity
                 end
         end

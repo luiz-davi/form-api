@@ -112,11 +112,7 @@ describe "Formulary RESOURCES", type: :request do
 
         it "editar as informações de um formulário" do
             put "/api/v1/formularies/#{form.id}", params: { 
-                formulary: { title: "Outer Space" },
-                questions: [
-                    { nome: "qual o nome da nossa galaxia?", tipo_pergunta: "text" },
-                    { nome: "qual o nome da constelação mais próxima da nossa galaxia?", tipo_pergunta: "text" }
-                ]
+                formulary: { title: "Outer Space" }
             }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to  have_http_status(:accepted)
@@ -164,6 +160,17 @@ describe "Formulary RESOURCES", type: :request do
             expect( Formulary.only_deleted.count ).to eq(1)
             expect( Formulary.only_deleted[0].id ).to eq(1)
             expect( Formulary.only_deleted[0].title ).to eq("Space")
+        end
+
+        it "retornar erro ao não encontrar o formulário" do
+            delete "/api/v1/formularies/#{form.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Couldn't find Formulary with 'id'=2 [WHERE \"formularies\".\"deleted_at\" IS NULL]"
+            })
         end
     end
 

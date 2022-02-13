@@ -218,6 +218,17 @@ RSpec.describe "Answers RESOURCES", type: :request do
             })
         end
 
+        it "retornar erro ao não encontrar o answer" do
+            delete "/api/v1/answers/#{answer.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" =>  "Couldn't find Answer with 'id'=2 [WHERE \"answers\".\"deleted_at\" IS NULL]"
+            })
+        end
+
     end
 
     describe "DELETE /answers" do
@@ -241,6 +252,17 @@ RSpec.describe "Answers RESOURCES", type: :request do
             expect( Answer.only_deleted[0].id ).to eq(1)
             expect( Answer.only_deleted[0].content ).to eq("via lactea")
              
+        end
+
+        it "retornar erro ao não encontrar a answer" do
+            delete "/api/v1/answers/#{answer.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Couldn't find Answer with 'id'=2 [WHERE \"answers\".\"deleted_at\" IS NULL]"
+            })
         end
     end
 

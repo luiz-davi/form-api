@@ -125,6 +125,17 @@ RSpec.describe "Questions RESOURCES", type: :request do
                 "error" => "param is missing or the value is empty: question\nDid you mean?  action\n               controller\n               id"            
             })
         end
+
+        it "retornar erro ao não encontrar a questão" do
+            delete "/api/v1/questions/#{question.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Couldn't find Question with 'id'=2 [WHERE \"questions\".\"deleted_at\" IS NULL]"
+            })
+        end
     end
 
     describe "DELETE /questions" do
@@ -141,6 +152,17 @@ RSpec.describe "Questions RESOURCES", type: :request do
             expect(response).to have_http_status(:no_content)
             expect( Question.only_deleted.count ).to eq(1)
             expect( Question.only_deleted[0].nome ).to eq("qual o nome da nossa galaxia?")
+        end
+
+        it "retornar erro ao não encontrar o formulário" do
+            delete "/api/v1/questions/#{question.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Couldn't find Question with 'id'=2 [WHERE \"questions\".\"deleted_at\" IS NULL]"
+            })
         end
     
     end

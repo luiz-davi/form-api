@@ -8,6 +8,7 @@ module Api
 
             rescue_from ActionController::ParameterMissing, with: :parameter_missing 
             rescue_from ActiveRecord::RecordInvalid, with: :validates_errors
+            rescue_from ActiveRecord::RecordNotFound, with: :entety_not_found
 
             def index
                 visits = Visit.all
@@ -29,7 +30,7 @@ module Api
                 if @visit.update(visits_params)
                    render json: VisitsRepresenter.as_json_entety(@visit), status: :accepted 
                 else
-                    render json: @visit.erros, status: :unprocessable_entity
+                    render json: @visit.errors, status: :unprocessable_entity
                 end
             end
 
@@ -67,6 +68,10 @@ module Api
                 end
 
                 def validates_errors(e)
+                    render json: { error: e.message }, status: :unprocessable_entity
+                end
+
+                def entety_not_found(e)
                     render json: { error: e.message }, status: :unprocessable_entity
                 end
         end

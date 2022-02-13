@@ -9,6 +9,7 @@ module Api
 
             rescue_from ActionController::ParameterMissing, ActiveRecord::RecordNotFound, with: :parameter_missing
             rescue_from ActiveRecord::RecordInvalid, with: :parameter_already_exists
+            rescue_from ActiveRecord::RecordNotFound, with: :entety_not_found
 
             def index
                 questions = Question.all
@@ -78,6 +79,10 @@ module Api
                 end
 
                 def parameter_already_exists(e)
+                    render json: { error: e.message }, status: :unprocessable_entity
+                end
+
+                def entety_not_found(e)
                     render json: { error: e.message }, status: :unprocessable_entity
                 end
         end

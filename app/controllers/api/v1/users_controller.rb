@@ -8,6 +8,7 @@ module Api
             before_action :set_user, only: [:update, :destroy]
 
             rescue_from ActiveRecord::RecordInvalid, with: :validates
+            rescue_from ActiveRecord::RecordNotFound, with: :entety_not_found
             
             def index
                 users = User.all
@@ -68,6 +69,10 @@ module Api
             end
             
             def validates(e)
+                render json: { error: e.message }, status: :unprocessable_entity
+            end
+
+            def entety_not_found(e)
                 render json: { error: e.message }, status: :unprocessable_entity
             end
         end

@@ -115,6 +115,17 @@ describe 'User RESOURCES', type: :request do
             })
         end
 
+        it "retornar erro ao não encontrar o usuário" do
+            delete "/api/v1/users/#{user.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.eU5RmofDjsTBkmYFZmccyBoKtLS6Rqebe1wnHDtyzto" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Couldn't find User with 'id'=2 [WHERE \"users\".\"deleted_at\" IS NULL]"
+            })
+        end
+
     end
 
     describe 'DELETE /user' do
@@ -150,6 +161,17 @@ describe 'User RESOURCES', type: :request do
             }
 
             expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "retornar erro ao não encontrar o usuário" do
+            delete "/api/v1/users/#{user.id + 1}", headers: { 
+                "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.eU5RmofDjsTBkmYFZmccyBoKtLS6Rqebe1wnHDtyzto" 
+            }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)).to eq({
+                "error" => "Couldn't find User with 'id'=2 [WHERE \"users\".\"deleted_at\" IS NULL]"
+            })
         end
     end
 end
