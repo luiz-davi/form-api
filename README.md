@@ -19,7 +19,7 @@ A aplicação tem por finalidade simular uma pesquisa de campo. Formulários sã
   > eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w
 + Com o JWT salvo, é possível agora ter acesso a todos os outros endpoints
 
-## EndPoints
+## ENDPOINTS
 
 ### Users
 + Listagem:
@@ -33,24 +33,29 @@ A aplicação tem por finalidade simular uma pesquisa de campo. Formulários sã
 ### Formularies
 
 + Criação
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{ "formulary": { "title": **form_title** }, "questions": [ { "nome": **title_question**, "tipo_pergunta": **tipo_question** } ] }'  http://localhost:3000/api/v1/formularies -v <br><br>
+Esse esquema corresponde a uma pergunta do formulário<br><br>
+**{ "nome": title_question, "tipo_pergunta": tipo_question }** <br><br>
+Serão craidas tantas quanto forem colocadas <br>
 + Listagem
->
+> curl --request GET http://localhost:3000/api/v1/formularies -v
 + Edição
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request PUT --data '{"formulary": {"title": **novo_titulo**} }' http://localhost:3000/api/v1/formularies/ **formulary_id** -v
 + Remoção
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request DELETE http://localhost:3000/api/v1/formularies/ **formulary_id** -v
 
 ### Questions
 
 + Criação
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{"formulary_id": **formulary_id**, "question": { "nome": **question_nome**, "tipo_pergunta": **question_tipo** } }' http://localhost:3000/api/v1/questions -v
+
 + Listagem
->
+> curl --request GET http://localhost:3000/api/v1/questions -v
 + Edição
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request PUT --data '{"question": { "nome": novo_nome, "tipo_pergunta": novo_tipo } }' http://localhost:3000/api/v1/questions/ **question_id**  -v
+
 + Remoção
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request DELETE http://localhost:3000/api/v1/questions/ **question_id** -v
 
 ### Visits
 
@@ -66,13 +71,17 @@ A aplicação tem por finalidade simular uma pesquisa de campo. Formulários sã
 ### Answers
 
 + Criação
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{"answer": { "content": **answer_content**, "question_id": **question_id**, "formulary_id": **formulary_id**, "visit_id": **visit_id**, "answered_at": **answer_answered_at** } }' http://localhost:3000/api/v1/answers -v
 + Listagem
->
+> curl --request GET http://localhost:3000/api/v1/visits -v
 + Edição
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request PUT --data '{"answer": { "content": **nova_resposta** } }' http://localhost:3000/api/v1/answers/ **answer_id** -v
 + Remoção
->
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request DELETE http://localhost:3000/api/v1/answers/ **amswer_id** -v
++ Responder Formulario
+> Nesse ENPOINT, é necessário que o usuário saiba exatamente quantas questões o formulário tem, e quais são elas, para poder criar todas as respostas de uma vez, e que deem match com as questões corretas. <br><br>
+curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{ "formulary": **formulary_title**, "visit": **visit_d**, "answers": [ { "content": **primeira_resposta** }, { "content": **segunda_resposta** } ] }'  http://localhost:3000/api/v1/responder_formulario -v <br><br>
+Essa chama é um exemplo de uma resposta de um formulário que tem duas perguntas, mas pode haver mais, tudo depende do formulário.
 
 ## Ferramentas e versões 🛠
 
@@ -83,6 +92,7 @@ Rails       | 6.1.4.1
 Git         | 2.25
 JWT         | 2.3.0
 Rspec       | 3.10
+Paranoia    | 2.5
 
 
 
