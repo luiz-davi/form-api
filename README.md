@@ -33,10 +33,11 @@ A aplicação tem por finalidade simular uma pesquisa de campo. Formulários sã
 ### Formularies
 
 + Criação
-> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{ "formulary": { "title": **form_title** }, "questions": [ { "nome": **title_question**, "tipo_pergunta": **tipo_question** } ] }'  http://localhost:3000/api/v1/formularies -v <br><br>
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{ "formulary": { "title": **form_title** }, "questions": [ { "nome": **title_question**, "tipo_pergunta": **tipo_question**, image: **imagem** } ] }'  http://localhost:3000/api/v1/formularies -v <br><br>
 Esse esquema corresponde a uma pergunta do formulário<br><br>
-**{ "nome": title_question, "tipo_pergunta": tipo_question }** <br><br>
-Serão craidas tantas quanto forem colocadas <br>
+**{ "nome": title_question, "tipo_pergunta": tipo_question, "image": imagem }** <br><br>
+Serão craidas tantas quanto forem colocadas <br><br>
+Só é necessário colocar a imagem se realmente houver uma. Lembrando que também é preciso colocar  **tipo de pergunta** como **imagem** para ela poder ser salva
 + Listagem
 > curl --request GET http://localhost:3000/api/v1/formularies -v
 + Edição
@@ -47,8 +48,8 @@ Serão craidas tantas quanto forem colocadas <br>
 ### Questions
 
 + Criação
-> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{"formulary_id": **formulary_id**, "question": { "nome": **question_nome**, "tipo_pergunta": **question_tipo** } }' http://localhost:3000/api/v1/questions -v
-
+> curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{"formulary_id": **formulary_id**, "question": { "nome": **question_nome**, "tipo_pergunta": **question_tipo**, "imagem": **question_imagem** } }' http://localhost:3000/api/v1/questions -v<br><br>
+Só é necessário colocar a imagem se realmente houver uma. Lembrando que também é preciso colocar  **tipo de pergunta** como **imagem** para ela poder ser salva
 + Listagem
 > curl --request GET http://localhost:3000/api/v1/questions -v
 + Edição
@@ -100,6 +101,6 @@ Git         | 2.25
 JWT         | 2.3.0
 Rspec       | 3.10
 Paranoia    | 2.5
-
+Active Storage | 6.1
 
 
