@@ -83,6 +83,13 @@ Serão craidas tantas quanto forem colocadas <br>
 curl --header "Authorization: Bearer **token**" --header "Content-Type: application/json" --request POST --data '{ "formulary": **formulary_title**, "visit": **visit_d**, "answers": [ { "content": **primeira_resposta** }, { "content": **segunda_resposta** } ] }'  http://localhost:3000/api/v1/responder_formulario -v <br><br>
 Essa chama é um exemplo de uma resposta de um formulário que tem duas perguntas, mas pode haver mais, tudo depende do formulário.
 
+## Explicação dos teste
+
++ Os testes consistem inteiramente em testes de *request*, pois testam as **rotas** e os **controladores** de uma vez só.
++ Grande parte dos testes são para validar as operações básicas como listagem, criação, edição e remoção, mas também checar seus possíveis erros, como entidade não encontrada, parâmetros faltando, etc. Porém, há dois ENDPOINTs que se comportam de forma diferente:
+    + A **criação de um formulário** também cria, pelo menos, uma questão obrigatória, para que não seja possível criar formulários sem questões.
+    + Um ENDPOINT chamado **responde formulário**, onde o usuário deve especificar a visita, o formulário, e todas as respostas referentes ao formulário. As validações necessárias ainda então sendo pensadas.
++ Também há testes de validações, como no caso das visitas, onde as datas tem que fazer sentido. No caso dos usuários, validações de cpf iguais e cpf inválido, por exemplo.
 ## Ferramentas e versões 🛠
 
 Ferramentas | Versões
