@@ -102,7 +102,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
                 "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
             }
 
-            expect(response).to have_http_status(:not_found)
+            expect(response).to have_http_status(:unprocessable_entity)
             expect(JSON.parse(response.body)).to eq({
                 "error"=> "Validation failed: Formulary must exist, Question must exist"
             })
@@ -223,7 +223,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
                 "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
             }
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:not_found)
             expect(JSON.parse(response.body)).to eq({
                 "error" =>  "Couldn't find Answer with 'id'=2 [WHERE \"answers\".\"deleted_at\" IS NULL]"
             })
@@ -259,7 +259,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
                 "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" 
             }
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:not_found)
             expect(JSON.parse(response.body)).to eq({
                 "error" => "Couldn't find Answer with 'id'=2 [WHERE \"answers\".\"deleted_at\" IS NULL]"
             })

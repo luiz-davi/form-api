@@ -40,7 +40,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
                     formulary_id: form.id,
                     question: { 
                         nome: "qual o apelido Tyrion?",  
-                        tipo_pergunta: "text" 
+                        tipo_pergunta: "text",
+                        
                     } 
                 }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
             }.to change { Question.count }.from(1).to eq(2)
@@ -54,6 +55,21 @@ RSpec.describe "Questions RESOURCES", type: :request do
             }) 
         end
 
+        it "criando pergunta com imagem" do
+            expect{
+                post "/api/v1/questions", params: { 
+                    formulary_id: form.id,
+                    image: "/home/luiz/Imagens/tyrion.jpg",
+                    question: { 
+                        nome: "qual o apelido Tyrion?",  
+                        tipo_pergunta: "image",
+                    } 
+                }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
+            }.to change { Question.count }.from(1).to eq(2)
+
+
+        end
+
         it "retornando erro de pergunta ja existente para esse formulário" do
             post "/api/v1/questions", params: { 
                 formulary_id: form.id,
@@ -65,10 +81,7 @@ RSpec.describe "Questions RESOURCES", type: :request do
 
             expect(response).to have_http_status(:method_not_allowed)
             expect(JSON.parse(response.body)).to eq({
-                "id" => form.id,
-                "nome"=> "qual o nome da familia dos dragões?",
-                "formulary"=> "Game Of Thrones",
-                "tipo_pergunta"=> "text"
+                "error" => "questão já existente para esse formulário"
             }) 
         end
 

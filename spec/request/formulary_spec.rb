@@ -37,7 +37,7 @@ describe "Formulary RESOURCES", type: :request do
             post "/api/v1/formularies", params: { 
                 formulary: { title: "CS Go" },
                 questions: [
-                    { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "text" },
+                    { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "image", image: "/home/luiz/Imagens/tyrion.jpg" },
                     { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" },
                 ]
             }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
@@ -51,7 +51,7 @@ describe "Formulary RESOURCES", type: :request do
                 "questions" => [
                     {
                         "question"=>"qual o nome do time vencedor do major de 2021?", 
-                        "tipo_pergunta"=>"text"
+                        "tipo_pergunta"=>"image"
                     }, 
                     {
                         "question"=>"qual o nome do melhor awper do mundo?", 

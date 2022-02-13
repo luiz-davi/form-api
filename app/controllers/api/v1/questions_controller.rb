@@ -18,8 +18,13 @@ module Api
             end
 
             def create
+
                 question = Question.new(questions_params.merge(formulary_id: @form.id))
 
+                if question.tipo_pergunta == "image"
+                    image = params[:image]
+                    question.image.attach(io: File.open(image), filename: "image.jpg", content_type: "image/jpeg")
+                end
 
                 if @form.questions.find_by(nome: question.nome).nil?
                     if question.save!
@@ -28,7 +33,7 @@ module Api
                 else
                     quest = Question.find_by(nome: question.nome)
 
-                    render json: QuestionsRepresenter.as_json_entety(quest), status: :method_not_allowed
+                    render json: {error: "questão já existente para esse formulário"}, status: :method_not_allowed
                 end
             end
 
@@ -62,7 +67,7 @@ module Api
 
                 # questions
                 def questions_params
-                    params.require(:question).permit(:nome, :tipo_pergunta)
+                    params.require(:question).permit(:nome, :tipo_pergunta, :image)
                 end
 
                 def set_question
