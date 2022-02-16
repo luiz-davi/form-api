@@ -4,8 +4,8 @@ RSpec.describe "Visits RESOURCES", type: :request do
 
     describe "GET /visits" do
         let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
-        let!(:visit_1) { FactoryBot.create(:visit, data: "2022-02-15 10:00:00", status: "pendente", checkin_at: "nil", checkout_at: "nil", user_id: user.id) }
-        let!(:visit_2) { FactoryBot.create(:visit, data: "2022-03-10 09:00:00", status: "pendente", checkin_at: "nil", checkout_at: "nil", user_id: user.id) }
+        let!(:visit_1) { FactoryBot.create(:visit, data: "2022-12-15 10:00:00", status: "pendente", checkin_at: "nil", checkout_at: "nil", user_id: user.id) }
+        let!(:visit_2) { FactoryBot.create(:visit, data: "2022-11-10 09:00:00", status: "pendente", checkin_at: "nil", checkout_at: "nil", user_id: user.id) }
 
         it "listar todas as visitas" do
             get "/api/v1/visits"
@@ -15,14 +15,14 @@ RSpec.describe "Visits RESOURCES", type: :request do
                 {
                     "checkin_at"=>nil,
                     "checkout_at"=>nil,
-                    "data"=>"2022-02-15",
+                    "data"=>"2022-12-15",
                     "id"=>1,
                     "status"=>"pendente"
                 },
                 {
                     "checkin_at"=>nil,
                     "checkout_at"=>nil,
-                    "data"=>"2022-03-10",
+                    "data"=>"2022-11-10",
                     "id"=>2,
                     "status"=>"pendente"
                 }

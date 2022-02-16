@@ -3,7 +3,7 @@ module Api
         class QuestionsController < ApplicationController
             include ActionController::HttpAuthentication::Token
             
-            before_action :authenticate_user, only: [:create, :destroy, :update]
+            before_action :authenticate_user, only: [:create]
             before_action :set_form, only: [:create]
             before_action :set_question, only: [:update, :destroy]
 
@@ -23,6 +23,7 @@ module Api
 
                 if question.tipo_pergunta == "image"
                     image = params[:image]
+                    
                     question.image.attach(io: File.open(image), filename: "image.jpg", content_type: "image/jpeg")
                 end
 
@@ -52,19 +53,6 @@ module Api
             end
 
             private
-
-                # autenticação
-                def authenticate_user
-                    # Authorization: Bearer <token>
-                    token, _options = token_and_options(request)
-                    user_id = AuthenticationTokenService.decode(token)
-
-                    User.find(user_id)
-                    
-                rescue ActiveRecord::RecordNotFound,JWT::DecodeError
-                    render status: :unauthorized
-                end
-
                 # questions
                 def questions_params
                     params.require(:question).permit(:nome, :tipo_pergunta, :image)

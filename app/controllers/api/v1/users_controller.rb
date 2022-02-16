@@ -3,7 +3,6 @@ module Api
         class UsersController < ApplicationController
             include ActionController::HttpAuthentication::Token
             
-            before_action :authenticate_user, only: [:destroy, :update]
             before_action :check_user, only: [:destroy, :update]
             before_action :set_user, only: [:update, :destroy]
 
@@ -49,16 +48,7 @@ module Api
             def set_user
                 @user = User.find(params[:id])
             end
-
-            def authenticate_user
-                # Authorization: Bearer <token>
-                token, _options = token_and_options(request)
-                user_id = AuthenticationTokenService.decode(token)
-                
-            rescue ActiveRecord::RecordNotFound,JWT::DecodeError
-                render status: :unauthorized
-            end
-
+            
             def check_user
                 token, _options = token_and_options(request)
                 user_id = AuthenticationTokenService.decode(token)

@@ -3,7 +3,7 @@ module Api
         class VisitsController < ApplicationController
             include ActionController::HttpAuthentication::Token
             
-            before_action :authenticate_user, only: [:create, :destroy, :update]
+            before_action :authenticate_user, only: [:create]
             before_action :set_visit, only: [:update, :destroy]
 
             rescue_from ActionController::ParameterMissing, with: :parameter_missing 
@@ -17,7 +17,7 @@ module Api
             end
 
             def create
-                visit = Visit.new(visits_params.merge(user_id: authenticate_user.id))
+                visit = Visit.new(visits_params.merge(user_id: user.id))
                 
                 if visit.save!
                     render json: VisitsRepresenter.as_json_entety(visit), status: :created
@@ -41,17 +41,7 @@ module Api
             end
 
             private
-                # autenticação
-                def authenticate_user
-                    # Authorization: Bearer <token>
-                    token, _options = token_and_options(request)
-                    user_id = AuthenticationTokenService.decode(token)
-
-                    User.find(user_id)
-                    
-                rescue ActiveRecord::RecordNotFound,JWT::DecodeError
-                    render status: :unauthorized
-                end
+                
 
                 # visits
                 def visits_params
@@ -60,6 +50,13 @@ module Api
 
                 def set_visit
                     @visit = Visit.find(params[:id])
+                end
+
+                def user
+                    token, _options = token_and_options(request)
+                    user_id = AuthenticationTokenService.decode(token)
+
+                    User.find(user_id)
                 end
 
                 # erros

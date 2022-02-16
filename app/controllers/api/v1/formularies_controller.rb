@@ -3,7 +3,7 @@ module Api
         class FormulariesController < ApplicationController
             include ActionController::HttpAuthentication::Token
             
-            before_action :authenticate_user, only: [:create, :destroy, :update]
+            before_action :authenticate_user, only: [:create]
             before_action :check_questions, only: [:create]
             before_action :set_formulary, only: [:update, :destroy]
          
@@ -45,17 +45,6 @@ module Api
             end
 
             private
-                def authenticate_user
-                    # Authorization: Bearer <token>
-                    token, _options = token_and_options(request)
-                    user_id = AuthenticationTokenService.decode(token)
-
-                    User.find(user_id)
-                    
-                rescue ActiveRecord::RecordNotFound,JWT::DecodeError
-                    render status: :unauthorized
-                end
-
                 def check_questions
                     if params.require(:questions)[0] == ""
                         render json: { error: "deve haver pelo menos uma pergunta" }, status: :bad_request

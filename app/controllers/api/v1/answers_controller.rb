@@ -3,7 +3,7 @@ module Api
         class AnswersController < ApplicationController
             include ActionController::HttpAuthentication::Token
             
-            before_action :authenticate_user, only: [:create, :update, :responder_formulario]
+            before_action :authenticate_user, only: [:create, :responder_formulario]
             before_action :set_answer, only: [:update, :destroy]
 
             rescue_from ActionController::ParameterMissing, ActiveRecord::RecordInvalid, with: :parameter_missing
@@ -95,18 +95,6 @@ module Api
 
                 def visit
                     Visit.find(params.require(:answer)[:visit_id])
-                end
-
-                # before_actions
-                def authenticate_user
-                    # Authorization: Bearer <token>
-                    token, _options = token_and_options(request)
-                    user_id = AuthenticationTokenService.decode(token)
-
-                    User.find(user_id)
-                    
-                rescue ActiveRecord::RecordNotFound, JWT::DecodeError
-                    render status: :unauthorized
                 end
 
                 # erros
