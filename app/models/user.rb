@@ -2,7 +2,7 @@ class User < ApplicationRecord
     has_secure_password
     acts_as_paranoid
     
-    validates :nome, presence: true
+    validates :name, presence: true
     validates :email, presence: true, uniqueness: true
     validates :password, presence: true, length: { minimum: 6 }
     validates :cpf, presence: true, uniqueness: true, length: { is: 11 }, numericality: { only_integer: true }

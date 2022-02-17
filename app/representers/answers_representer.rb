@@ -32,7 +32,7 @@ class AnswersRepresenter
         end
 
         def self.get_question(id)
-            Question.find(id).nome
+            Question.find(id).name
         end
 
         def self.get_visit(id)

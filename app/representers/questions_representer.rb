@@ -4,9 +4,9 @@ class QuestionsRepresenter
         questions.map do |question|
             {
                 id: question.id,
-                nome: question.nome,
+                name: question.name,
                 formulary: question.formulary.title,
-                tipo_pergunta: question.tipo_pergunta
+                type_question: question.type_question
             }
         end
     end
@@ -16,9 +16,9 @@ class QuestionsRepresenter
 
         {
             id: question["id"],
-            nome: question["nome"],
+            name: question["name"],
             formulary: get_form(question["formulary_id"]),
-            tipo_pergunta: question["tipo_pergunta"]
+            type_question: question["type_question"]
         }
     end
 

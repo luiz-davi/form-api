@@ -4,8 +4,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
 
     describe "GET /questions" do
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         it "listando todas as perguntas" do
             get "/api/v1/questions"
@@ -14,24 +14,24 @@ RSpec.describe "Questions RESOURCES", type: :request do
             expect(JSON.parse(response.body)).to eq([
                 {
                     "id"=>1,
-                    "nome"=>"qual o nome da nossa galaxia?",
+                    "name"=>"qual o nome da nossa galaxia?",
                     "formulary"=>"Space",
-                    "tipo_pergunta"=>"text"
+                    "type_question"=>"text"
                 },
                 {
                     "id"=>2,
-                    "nome"=>"qual o nome da constelação mais próxima da nossa galaxia?",
+                    "name"=>"qual o nome da constelação mais próxima da nossa galaxia?",
                     "formulary"=>"Space",
-                    "tipo_pergunta"=>"text"
+                    "type_question"=>"text"
                 }
             ])
         end
     end
 
     describe "POST /questions" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
         let!(:form) { FactoryBot.create(:formulary, title: "Game Of Thrones") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da familia dos dragões?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da familia dos dragões?", formulary_id: form.id, type_question: "text") }
 
         
         it "criando pergunta" do
@@ -39,8 +39,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
                 post "/api/v1/questions", params: { 
                     formulary_id: form.id,
                     question: { 
-                        nome: "qual o apelido Tyrion?",  
-                        tipo_pergunta: "text",
+                        name: "qual o apelido Tyrion?",  
+                        type_question: "text",
                         
                     } 
                 }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
@@ -49,9 +49,9 @@ RSpec.describe "Questions RESOURCES", type: :request do
             expect(response).to have_http_status(:created)
             expect(JSON.parse(response.body)).to eq({
                 "id" => 2,
-                "nome"=> "qual o apelido Tyrion?",
+                "name"=> "qual o apelido Tyrion?",
                 "formulary"=> "Game Of Thrones",
-                "tipo_pergunta"=> "text"
+                "type_question"=> "text"
             }) 
         end
 
@@ -61,8 +61,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
                     formulary_id: form.id,
                     image: "/home/luiz/Imagens/tyrion.jpg",
                     question: { 
-                        nome: "qual o apelido Tyrion?",  
-                        tipo_pergunta: "image",
+                        name: "qual o apelido Tyrion?",  
+                        type_question: "image",
                     } 
                 }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
             }.to change { Question.count }.from(1).to eq(2)
@@ -74,8 +74,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
             post "/api/v1/questions", params: { 
                 formulary_id: form.id,
                 question: { 
-                    nome: "qual o nome da familia dos dragões?",  
-                    tipo_pergunta: "text" 
+                    name: "qual o nome da familia dos dragões?",  
+                    type_question: "text" 
                 } 
             }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
@@ -88,8 +88,8 @@ RSpec.describe "Questions RESOURCES", type: :request do
         it "retornar erro quando o formulario estiver faltando" do
             post "/api/v1/questions", params: {
                  question: {    
-                    nome: "qual o nome da familia dos dragões?",  
-                    tipo_pergunta: "text" 
+                    name: "qual o nome da familia dos dragões?",  
+                    type_question: "text" 
                 }  
             }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
@@ -112,20 +112,20 @@ RSpec.describe "Questions RESOURCES", type: :request do
     end
 
     describe "PUT /questions" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da nossa galaxia?", formulary_id: form.id, type_question: "text") }
         
         it "atualizar as informações de uma pergunta" do
-            put "/api/v1/questions/#{question.id}", params: { question: { tipo_pergunta: "photo" }}, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
+            put "/api/v1/questions/#{question.id}", params: { question: { type_question: "photo" }}, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
             expect(response).to have_http_status(:accepted)
             expect(JSON.parse(response.body)).to eq({
                 "id" => 1,
                 "formulary" => "Space",
-                "nome" => "qual o nome da nossa galaxia?",
-                "tipo_pergunta" => "photo"
+                "name" => "qual o nome da nossa galaxia?",
+                "type_question" => "photo"
 
             })
         end
@@ -152,10 +152,10 @@ RSpec.describe "Questions RESOURCES", type: :request do
     end
 
     describe "DELETE /questions" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da nossa galaxia?", formulary_id: form.id, type_question: "text") }
         
         it "apagar uma question" do
             expect {
@@ -164,7 +164,7 @@ RSpec.describe "Questions RESOURCES", type: :request do
 
             expect(response).to have_http_status(:no_content)
             expect( Question.only_deleted.count ).to eq(1)
-            expect( Question.only_deleted[0].nome ).to eq("qual o nome da nossa galaxia?")
+            expect( Question.only_deleted[0].name ).to eq("qual o nome da nossa galaxia?")
         end
 
         it "retornar erro ao não encontrar o formulário" do

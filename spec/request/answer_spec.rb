@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe "Answers RESOURCES", type: :request do
 
     describe "GET /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         let!(:visit) { FactoryBot.create(:visit, data: "2022-02-27", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
 
@@ -40,11 +40,11 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "POST /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         let!(:visit) { FactoryBot.create(:visit, data: "2022-02-27", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
         let!(:visit2) { FactoryBot.create(:visit, data: "2050-10-19", status: "realizada", checkin_at: "2022-01-08 10:00", checkout_at: "2022-01-08 10:00", user_id: user.id) }
@@ -71,7 +71,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
             expect(JSON.parse(response.body)).to eq({
                 "id" => 1,
                 "content" => "via lactea",
-                "question" => question.nome,
+                "question" => question.name,
                 "formulary" => form.title,
                 "visit" => "2022-02-27",
                 "answered_at" => Date.today.strftime("%Y-%m-%d")
@@ -130,11 +130,11 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "POST /responder_formulario" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         let!(:visit) { FactoryBot.create(:visit, data: "2022-05-30", status: "realizando", checkin_at: "2022-02-04 10:00", checkout_at: nil, user_id: user.id) }
         
@@ -178,10 +178,10 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "PUT /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da galaxya que tem o nome de um animal no meio?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da galaxya que tem o name de um animal no meio?", formulary_id: form.id, type_question: "text") }
 
         let!(:visit) { FactoryBot.create(:visit, data: "2022-02-27", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
 
@@ -200,7 +200,7 @@ RSpec.describe "Answers RESOURCES", type: :request do
             expect(JSON.parse(response.body)).to eq({
                 "id" => 1,
                 "content" => "Ursa Major",
-                "question" => "qual o nome da galaxya que tem o nome de um animal no meio?",
+                "question" => "qual o nome da galaxya que tem o name de um animal no meio?",
                 "formulary" => "Space",
                 "visit" => "2022-02-27",
                 "answered_at" => Date.today.strftime("%Y-%m-%d"),
@@ -232,10 +232,10 @@ RSpec.describe "Answers RESOURCES", type: :request do
     end
 
     describe "DELETE /answers" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da galaxya que tem o nome de um animal no meio?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o nome da galaxya que tem o name de um animal no meio?", formulary_id: form.id, type_question: "text") }
 
         let!(:visit) { FactoryBot.create(:visit, data: "2022-02-27", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
 

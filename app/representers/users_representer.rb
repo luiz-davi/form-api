@@ -3,9 +3,8 @@ class UsersRepresenter
         users.map do |user|
             {
                 id: user.id,
-                nome: user.nome,
+                name: user.name,
                 email: user.email,
-                
                 cpf: user.cpf
             }
         end
@@ -16,7 +15,7 @@ class UsersRepresenter
 
         {
             id: user["id"],
-            nome: user["nome"],
+            name: user["name"],
             email: user["email"],
             cpf: user["cpf"]
         }

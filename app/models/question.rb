@@ -4,6 +4,6 @@ class Question < ApplicationRecord
   acts_as_paranoid
   has_one_attached :image
   
-  validates :nome, presence: true
-  validates :tipo_pergunta, presence: true
+  validates :name, presence: true
+  validates :type_question, presence: true
 end

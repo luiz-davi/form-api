@@ -25,7 +25,7 @@ class FormulariesRepresenter
         def self.get_questions(formulary)
             questions = []
             formulary.questions.each do |question|
-                questions << { question: question.nome, tipo_pergunta: question.tipo_pergunta}
+                questions << { question: question.name, type_question: question.type_question}
             end
 
             questions

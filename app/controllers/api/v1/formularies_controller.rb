@@ -66,10 +66,10 @@ module Api
                     
                     questions.each do |quest|
                         # garantindo que não haja duas perguntas com a mesma descrição dentro de um mesmo formulário
-                        unless formulary.questions.find_by(nome: quest[:nome])
-                            question = Question.create(nome: quest[:nome], formulary_id: formulary.id, tipo_pergunta: quest[:tipo_pergunta])
+                        unless formulary.questions.find_by(name: quest[:name])
+                            question = Question.create(name: quest[:name], formulary_id: formulary.id, type_question: quest[:type_question])
 
-                            if question.tipo_pergunta == "image"
+                            if question.type_question == "image"
                                 image = quest[:image]
                                 question.image.attach(io: File.open(image), filename: "image.jpg", content_type: "image/jpeg")
                             end

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Visits RESOURCES", type: :request do
 
     describe "GET /visits" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
         let!(:visit_1) { FactoryBot.create(:visit, data: "2022-12-15 10:00:00", status: "pendente", checkin_at: "nil", checkout_at: "nil", user_id: user.id) }
         let!(:visit_2) { FactoryBot.create(:visit, data: "2022-11-10 09:00:00", status: "pendente", checkin_at: "nil", checkout_at: "nil", user_id: user.id) }
 
@@ -32,7 +32,7 @@ RSpec.describe "Visits RESOURCES", type: :request do
     end
     
     describe "POST /visits" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
 
         it "criar uma nova visita" do
@@ -155,7 +155,7 @@ RSpec.describe "Visits RESOURCES", type: :request do
     end
 
     describe "PUT /visits" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
         let!(:visit) { FactoryBot.create(:visit, data: "2022-05-15", status: "realizando", checkin_at: "2022-02-08 10:00", checkout_at: nil, user_id: user.id) }
 
         it "atualizar as informações de uma visita" do
@@ -192,7 +192,7 @@ RSpec.describe "Visits RESOURCES", type: :request do
     end
 
     describe "DELETE /visits" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
         let!(:visit) { FactoryBot.create(:visit, data: "2022-05-15", status: "realizada", checkin_at: "2022-02-08 10:00", checkout_at: "2022-02-08 12:00", user_id: user.id) }
 
         it "removendo um registro de visita do banco" do

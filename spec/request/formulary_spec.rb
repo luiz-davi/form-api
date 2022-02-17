@@ -4,8 +4,8 @@ describe "Formulary RESOURCES", type: :request do
 
     describe "GET /formularies" do
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o name da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o name da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         it 'listar todos os formulário' do
             get "/api/v1/formularies"
@@ -17,12 +17,12 @@ describe "Formulary RESOURCES", type: :request do
                     "title"=>"Space",
                     "questions"=>[
                         {
-                            "question"=>"qual o nome da nossa galaxia?", 
-                            "tipo_pergunta"=>"text"
+                            "question"=>"qual o name da nossa galaxia?", 
+                            "type_question"=>"text"
                         },
                         {
-                            "question"=>"qual o nome da constelação mais próxima da nossa galaxia?",
-                            "tipo_pergunta"=>"text"
+                            "question"=>"qual o name da constelação mais próxima da nossa galaxia?",
+                            "type_question"=>"text"
                         }
                     ]
                 }
@@ -31,14 +31,14 @@ describe "Formulary RESOURCES", type: :request do
     end
 
     describe "POST /formularies" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         it "criar um formulário" do
             post "/api/v1/formularies", params: { 
                 formulary: { title: "CS Go" },
                 questions: [
-                    { nome: "qual o nome do time vencedor do major de 2021?", tipo_pergunta: "image", image: "/home/luiz/Imagens/tyrion.jpg" },
-                    { nome: "qual o nome do melhor awper do mundo?", tipo_pergunta: "text" },
+                    { name: "qual o name do time vencedor do major de 2021?", type_question: "image", image: "/home/luiz/Imagens/tyrion.jpg" },
+                    { name: "qual o name do melhor awper do mundo?", type_question: "text" },
                 ]
             }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
@@ -50,12 +50,12 @@ describe "Formulary RESOURCES", type: :request do
                 "title" => "CS Go",
                 "questions" => [
                     {
-                        "question"=>"qual o nome do time vencedor do major de 2021?", 
-                        "tipo_pergunta"=>"image"
+                        "question"=>"qual o name do time vencedor do major de 2021?", 
+                        "type_question"=>"image"
                     }, 
                     {
-                        "question"=>"qual o nome do melhor awper do mundo?", 
-                        "tipo_pergunta"=>"text"
+                        "question"=>"qual o name do melhor awper do mundo?", 
+                        "type_question"=>"text"
                     }
                 ]
             })
@@ -71,16 +71,16 @@ describe "Formulary RESOURCES", type: :request do
         end
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o name da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o name da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
 
         it 'retornar um erro de title ja existente' do
             post "/api/v1/formularies", params: { 
                 formulary: { title: "Space" },
                 questions: [
-                    { nome: "qual o nome da nossa galaxia?", tipo_pergunta: "text" },
-                    { nome: "qual o nome da constelação mais próxima da nossa galaxia?", tipo_pergunta: "text" },
+                    { name: "qual o name da nossa galaxia?", type_question: "text" },
+                    { name: "qual o name da constelação mais próxima da nossa galaxia?", type_question: "text" },
                 ]
             }, headers: { "Authorization" => "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DiPWrOKsx3sPeVClrm_j07XNdSYHgBa3Qctosdxax3w" }
 
@@ -104,11 +104,11 @@ describe "Formulary RESOURCES", type: :request do
     end
     
     describe "PUT /formularies" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o name da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o name da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         it "editar as informações de um formulário" do
             put "/api/v1/formularies/#{form.id}", params: { 
@@ -121,12 +121,12 @@ describe "Formulary RESOURCES", type: :request do
                 "title"=>"Outer Space",
                 "questions"=>[
                     {
-                        "question"=>"qual o nome da nossa galaxia?", 
-                        "tipo_pergunta"=>"text"
+                        "question"=>"qual o name da nossa galaxia?", 
+                        "type_question"=>"text"
                     },
                     {
-                        "question"=>"qual o nome da constelação mais próxima da nossa galaxia?",
-                        "tipo_pergunta"=>"text"
+                        "question"=>"qual o name da constelação mais próxima da nossa galaxia?",
+                        "type_question"=>"text"
                     }
                 ]
             })
@@ -144,11 +144,11 @@ describe "Formulary RESOURCES", type: :request do
     end
 
     describe "DELETE /forlumaries" do
-        let!(:user) {FactoryBot.create(:user, nome: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
+        let!(:user) {FactoryBot.create(:user, name: "luiz", email: "luiz@gmail", password: "123456", cpf: "85213043070")}
 
         let!(:form) { FactoryBot.create(:formulary, title: "Space") }
-        let!(:question) { FactoryBot.create(:question, nome: "qual o nome da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
-        let!(:question2) { FactoryBot.create(:question, nome: "qual o nome da constelação mais próxima da nossa galaxia?", formulary_id: form.id, tipo_pergunta: "text") }
+        let!(:question) { FactoryBot.create(:question, name: "qual o name da nossa galaxia?", formulary_id: form.id, type_question: "text") }
+        let!(:question2) { FactoryBot.create(:question, name: "qual o name da constelação mais próxima da nossa galaxia?", formulary_id: form.id, type_question: "text") }
 
         it "remover um resgistro de um formulário do banco" do
             expect{

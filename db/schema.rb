@@ -64,9 +64,9 @@ ActiveRecord::Schema.define(version: 2022_02_13_114447) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string "nome"
+    t.string "name"
     t.integer "formulary_id", null: false
-    t.string "tipo_pergunta"
+    t.string "type_question"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2022_02_13_114447) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "nome"
+    t.string "name"
     t.string "email"
     t.string "cpf"
     t.datetime "created_at", precision: 6, null: false
